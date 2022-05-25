@@ -1,7 +1,7 @@
 
 import { Router } from "express";
 
-import { dobro, somar, corprimaria,ingresso,temperatura,tabuada } from "./servise.js";
+import { dobro, somar, corprimaria, ingresso, temperatura, tabuada, caracter , maiornumero } from "./servise.js";
 
 const server = Router();
 
@@ -87,6 +87,51 @@ server.get("/tabuada",(req,resp)=>{
     }
 })
 
+server.post('/dia/ingresso' , (req,resp) => {
 
+    try {
+        const { inteira, meia , semana ,nacionalidade} = req.body;
+
+        const total = ingresso( inteira, meia , semana ,nacionalidade);
+
+        resp.send({ total : total })
+
+    } 
+    catch (err) {
+        resp.status(406).send({ error: err.message })
+    }
+
+})
+
+server.get('/frequencia/:texto/:caractere', (req,resp) => {
+
+    try {
+        
+        const { texto, caractere } = req.params ;
+        const  freq = caracter(texto , caractere);
+
+        resp.send({ freq : freq });
+
+    } catch (err) {
+        
+        resp.status(406).send({ erro: err.message })
+    }
+
+})
+
+ server.post('/maiorNumero', (req,resp) => {
+
+    try {
+        
+        const numero = req.body;
+
+        const maior = maiornumero(numero);
+        
+        resp.send({ maior:maior })
+    } 
+    catch (err) {
+        resp.status(406).send({ erro : err.message })
+    }
+ })
 
 export default server;
